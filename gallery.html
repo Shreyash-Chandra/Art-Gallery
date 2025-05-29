@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery</title>
+  <style>
+    body {
+      background-color: black;
+      padding: 100px 50px;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      animation: fadeIn 1s ease;
+    }
+
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .gallery-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      cursor: pointer;
+      animation: popIn 0.5s ease forwards;
+      border: 3px solid transparent;
+    }
+
+    .gallery-container img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px #95c11e;
+      border: 3px solid #95c11e;
+      z-index: 20;
+    }
+
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .fullscreen-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #95c11e;
+      border: 4px solid #95c11e;
+      animation: zoomIn 0.4s ease;
+    }
+
+    .fullscreen-overlay.active {
+      display: flex;
+    }
+
+    /* Animations */
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.6);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gallery-container">
+    <img src="./Img-vid/1.jpeg" alt="Gallery Image 1">
+    <img src="./Img-vid/2.jpeg" alt="Gallery Image 2">
+    <img src="./Img-vid/3.jpeg" alt="Gallery Image 3">
+    <img src="./Img-vid/4.jpeg" alt="Gallery Image 4">
+    <img src="./Img-vid/5.jpeg" alt="Gallery Image 5">
+    <img src="./Img-vid/6.jpeg" alt="Gallery Image 6">
+    <img src="./Img-vid/7.jpeg" alt="Gallery Image 7">
+    <img src="./Img-vid/8.jpeg" alt="Gallery Image 8">
+    <img src="./Img-vid/9.jpeg" alt="Gallery Image 9">
+    <img src="./Img-vid/10.jpeg" alt="Gallery Image 10">
+    <img src="./Img-vid/11.jpeg" alt="Gallery Image 11">
+    <img src="./Img-vid/12.jpeg" alt="Gallery Image 12">
+    <img src="./Img-vid/13.jpeg" alt="Gallery Image 13">
+    <img src="./Img-vid/14.jpg" alt="Gallery Image 14">
+    <img src="./Img-vid/15.jpg" alt="Gallery Image 15">
+    <!-- Add more images as needed -->
+  </div>
+
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <img id="fullscreenImage" src="" alt="Full Screen View" />
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.gallery-container img');
+    const overlay = document.getElementById('fullscreenOverlay');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        fullscreenImage.src = img.src;
+        overlay.classList.add('active');
+      });
+    });
+
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      fullscreenImage.src = "";
+    });
+  </script>
+
+</body>
+</html>
