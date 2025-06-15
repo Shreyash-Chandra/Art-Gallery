@@ -293,25 +293,73 @@
     }
 
     // Add upload button UI
-    function addUploadButton() {
-      if (document.getElementById('uploadContainer')) return; // Already exists
+    // Add upload button UI
+function addUploadButton() {
+  if (document.getElementById('uploadContainer')) return; // Already exists
 
-      const uploadContainer = document.createElement('div');
-      uploadContainer.id = 'uploadContainer';
-      uploadContainer.title = 'Click to upload new image';
+  const uploadContainer = document.createElement('div');
+  uploadContainer.id = 'uploadContainer';
+  uploadContainer.title = 'Click to upload new image';
+  uploadContainer.innerHTML = '+'; // Add the '+' sign
 
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-      fileInput.id = 'uploadInput';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.id = 'uploadInput';
 
-      uploadContainer.appendChild(fileInput);
-      galleryContainer.appendChild(uploadContainer);
+  uploadContainer.appendChild(fileInput);
+  galleryContainer.appendChild(uploadContainer);
 
-      // Show file picker when clicking the upload container
-      uploadContainer.addEventListener('click', () => {
-        fileInput.click();
+  // Show file picker when clicking the upload container
+  uploadContainer.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // Handle file selection and upload
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    // Upload to Cloudinary
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData
       });
+      const uploadData = await uploadRes.json();
+      if (uploadData.error) throw new Error(uploadData.error.message);
+
+      // Add to JSONBin
+      const currentImages = await fetchUploadedImages();
+      currentImages.push({
+        url: uploadData.secure_url,
+        public_id: uploadData.public_id
+      });
+
+      const saved = await saveImagesToJSONBin(currentImages);
+      if (saved) {
+        renderUploadedImages([{
+          url: uploadData.secure_url,
+          public_id: uploadData.public_id
+        }]);
+      } else {
+        alert('Failed to save uploaded image metadata.');
+      }
+
+    } catch (error) {
+      alert('Upload failed: ' + error.message);
+      console.error(error);
+    }
+
+    // Clear input for next upload
+    fileInput.value = '';
+  });
+}
+
 
       // Handle file selection and upload
       fileInput.addEventListener('change', async () => {
