@@ -120,7 +120,6 @@
       padding: 5px;
     }
 
-    /* Animations */
     @keyframes popIn {
       from { transform: scale(0.8); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
@@ -139,13 +138,11 @@
 </head>
 <body>
 
-  <!-- Admin Login Box -->
   <div class="admin-login">
     <input type="password" id="adminPass" placeholder="Admin Password">
     <button onclick="checkPassword()">Login</button>
   </div>
 
-  <!-- Gallery -->
   <div class="gallery-container" id="gallery">
     <img src="./Img-vid/1.jpeg" alt="Gallery Image 1" class="static-image">
     <img src="./Img-vid/2.jpeg" alt="Gallery Image 2" class="static-image">
@@ -228,7 +225,7 @@
       const img = document.createElement("img");
       img.src = url;
       img.alt = "Uploaded Image";
-      img.classList.add("uploaded-image");
+      img.classList.add("uploaded-image", "static-image");
       img.onclick = () => {
         fullscreenImage.src = img.src;
         overlay.classList.add("active");
