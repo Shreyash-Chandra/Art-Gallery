@@ -210,6 +210,7 @@
 
           const data = await res.json();
           const img = createImageElement(data.secure_url);
+          img.querySelector("img").classList.add("uploaded-image");
           gallery.insertBefore(img, uploadBox);
           saveToJsonBin();
         };
