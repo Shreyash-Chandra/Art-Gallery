@@ -21,7 +21,8 @@
       position: relative;
     }
 
-    .gallery-container img {
+    .gallery-container img,
+    .upload-box {
       width: 100%;
       height: auto;
       border-radius: 10px;
@@ -31,11 +32,22 @@
       border: 3px solid transparent;
     }
 
-    .gallery-container img:hover {
+    .gallery-container img:hover,
+    .upload-box:hover {
       transform: scale(1.08);
       box-shadow: 0 0 15px #95c11e;
       border: 3px solid #95c11e;
       z-index: 20;
+    }
+
+    .upload-box {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #95c11e;
+      font-size: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1 / 1;
     }
 
     .fullscreen-overlay {
@@ -62,6 +74,35 @@
 
     .fullscreen-overlay.active {
       display: flex;
+    }
+
+    /* Admin login box */
+    #admin-login-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #111;
+      border: 2px solid #95c11e;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 999;
+    }
+
+    #admin-login-box input {
+      background: black;
+      color: white;
+      border: 1px solid #95c11e;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    #admin-login-box button {
+      background: #95c11e;
+      color: black;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
     /* Animations */
@@ -99,7 +140,13 @@
 </head>
 <body>
 
-  <div class="gallery-container">
+  <!-- Admin login input -->
+  <div id="admin-login-box">
+    <input type="password" id="admin-password" placeholder="Admin Password">
+    <button onclick="checkAdmin()">Login</button>
+  </div>
+
+  <div class="gallery-container" id="gallery">
     <img src="./Img-vid/1.jpeg" alt="Gallery Image 1">
     <img src="./Img-vid/2.jpeg" alt="Gallery Image 2">
     <img src="./Img-vid/3.jpeg" alt="Gallery Image 3">
@@ -115,7 +162,6 @@
     <img src="./Img-vid/13.jpeg" alt="Gallery Image 13">
     <img src="./Img-vid/14.jpg" alt="Gallery Image 14">
     <img src="./Img-vid/15.jpg" alt="Gallery Image 15">
-    <!-- Add more images as needed -->
   </div>
 
   <div class="fullscreen-overlay" id="fullscreenOverlay">
@@ -123,21 +169,125 @@
   </div>
 
   <script>
-    const images = document.querySelectorAll('.gallery-container img');
-    const overlay = document.getElementById('fullscreenOverlay');
-    const fullscreenImage = document.getElementById('fullscreenImage');
+    const CLOUD_NAME = "dhrjqsvmq"; // Cloudinary cloud name
+    const UPLOAD_PRESET = "gallery_upload"; // Cloudinary upload preset
+    const BIN_ID = "684eea128a456b7966ae9886"; // JSONBin bin ID
+    const API_KEY = "$2a$10$1ReRtjk39Ep/jXa5fN7pA.NAeDEkqiJfuvhRgeB2drqcn7xSW/Lyi"; // JSONBin secret key
+    const ADMIN_PASSWORD = "admin123"; // Set your admin password
 
-    images.forEach(img => {
-      img.addEventListener('click', () => {
+    let isAdmin = false;
+    const gallery = document.getElementById("gallery");
+    const overlay = document.getElementById("fullscreenOverlay");
+    const fullscreenImage = document.getElementById("fullscreenImage");
+
+    // Add full-screen click for all images
+    function addImageEvents(img) {
+      img.addEventListener("click", () => {
         fullscreenImage.src = img.src;
-        overlay.classList.add('active');
+        overlay.classList.add("active");
       });
+
+      img.addEventListener("contextmenu", async (e) => {
+        e.preventDefault();
+        if (!isAdmin) return;
+
+        const confirmDelete = confirm("Delete this image?");
+        if (confirmDelete) {
+          img.remove();
+          await saveToJsonBin();
+        }
+      });
+    }
+
+    // Apply to initial images
+    document.querySelectorAll('.gallery-container img').forEach(img => {
+      addImageEvents(img);
     });
 
     overlay.addEventListener('click', () => {
       overlay.classList.remove('active');
       fullscreenImage.src = "";
     });
+
+    function checkAdmin() {
+      const input = document.getElementById("admin-password");
+      if (input.value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        document.getElementById("admin-login-box").style.display = "none";
+        showUploadBox();
+      } else {
+        alert("Incorrect password!");
+      }
+    }
+
+    function showUploadBox() {
+      const uploadBox = document.createElement("div");
+      uploadBox.className = "upload-box";
+      uploadBox.innerHTML = "+";
+
+      uploadBox.addEventListener("click", () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.onchange = async (e) => {
+          const file = e.target.files[0];
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", UPLOAD_PRESET);
+
+          const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            method: "POST",
+            body: formData
+          });
+
+          const cloudData = await cloudRes.json();
+          const imageUrl = cloudData.secure_url;
+
+          const img = document.createElement("img");
+          img.src = imageUrl;
+          img.alt = "Uploaded Image";
+          addImageEvents(img);
+          gallery.appendChild(img);
+          await saveToJsonBin();
+        };
+        input.click();
+      });
+
+      gallery.appendChild(uploadBox);
+    }
+
+    async function saveToJsonBin() {
+      const allImages = [...gallery.querySelectorAll("img")];
+      const staticCount = 15;
+      const uploadedImages = allImages.slice(staticCount).map(img => img.src);
+
+      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": API_KEY
+        },
+        body: JSON.stringify({ images: uploadedImages })
+      });
+    }
+
+    async function loadFromJsonBin() {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { "X-Master-Key": API_KEY }
+      });
+      const data = await res.json();
+      const urls = data.record.images || [];
+
+      urls.forEach(url => {
+        const img = document.createElement("");
+        img.src = url;
+        img.alt = "Uploaded Image";
+        addImageEvents(img);
+        gallery.appendChild(img);
+      });
+    }
+
+    loadFromJsonBin();
   </script>
 
 </body>
