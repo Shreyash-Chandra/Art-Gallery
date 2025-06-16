@@ -64,7 +64,7 @@
     const overlay = document.getElementById('overlay');
     const overlayImg = document.getElementById('overlayImg');
 
-    // Fullscreen effect
+    // Fullscreen view
     gallery.addEventListener('click', e => {
       if (e.target.tagName === 'IMG') {
         overlayImg.src = e.target.src;
@@ -79,13 +79,13 @@
       if (pass === ADMIN_PASSWORD) {
         isAdmin = true;
         enableUploadBox();
-        loadUploadedImages(); // ensure loader after login
+        allowDeleteOnUploaded();
       } else {
         alert('Wrong password!');
       }
     }
 
-    // Show upload button
+    // Upload box for admin
     function enableUploadBox() {
       if (document.querySelector('.upload-box')) return;
       const box = document.createElement('div');
@@ -108,31 +108,35 @@
           if (!r.secure_url) { alert('Upload failed'); return; }
           uploadedImages.push(r.secure_url);
           saveToJSONBin();
-          addUploadedImage(r.secure_url);
+          addUploadedImage(r.secure_url, true);
         };
         f.click();
       });
     }
 
-    // Add uploaded image element (only once)
-    function addUploadedImage(url) {
+    // Add uploaded image to DOM
+    function addUploadedImage(url, animate=true) {
       const img = document.createElement('img');
       img.src = url;
-      img.className = 'uploaded';
-      if (isAdmin) {
+      img.className = animate ? 'uploaded' : 'uploaded no-animate';
+      gallery.appendChild(img);
+    }
+
+    // Delete support for admin
+    function allowDeleteOnUploaded() {
+      document.querySelectorAll('.uploaded').forEach(img => {
         img.addEventListener('contextmenu', e => {
           e.preventDefault();
           if (confirm('Delete image?')) {
             img.remove();
-            uploadedImages = uploadedImages.filter(u=>u!==url);
+            uploadedImages = uploadedImages.filter(u => u !== img.src);
             saveToJSONBin();
           }
         });
-      }
-      gallery.insertBefore(img, document.querySelector('.upload-box'));
+      });
     }
 
-    // Save URLs to JSONBin
+    // Save to JSONBin
     async function saveToJSONBin(){
       await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
         method: 'PUT',
@@ -145,17 +149,17 @@
       });
     }
 
-    // Load on refresh
+    // Load uploaded images on page load (FOR EVERYONE)
     async function loadUploadedImages(){
       const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
         headers:{'X-Master-Key':JSONBIN_SECRET}
       }).then(r=>r.json());
-      uploadedImages = r.record.images||[];
-      uploadedImages.forEach(url => addUploadedImage(url));
+      uploadedImages = r.record.images || [];
+      uploadedImages.forEach(url => addUploadedImage(url, false));
     }
 
-    // On initial load, load only static images; admin must login to upload
-    // Uploaded ones load only after login
+    // Load on page load
+    window.onload = loadUploadedImages;
   </script>
 
 </body>
