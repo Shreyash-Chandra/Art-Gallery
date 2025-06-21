@@ -5,19 +5,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gallery</title>
   <style>
-    body { background-color: black; padding: 100px 50px; margin: 0; font-family: 'Segoe UI', sans-serif; animation: fadeIn 1s ease; }
-    .gallery-container { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; }
-    .gallery-container img, .upload-box { width:100%; border-radius:10px; cursor:pointer; transition:transform 0.4s, box-shadow 0.4s, border 0.4s; border:3px solid transparent; animation:popIn 0.5s ease forwards; position:relative; }
-    .gallery-container img:hover, .upload-box:hover { transform:scale(1.08); box-shadow:0 0 15px #95c11e; border:3px solid #95c11e; z-index:20; }
-    .upload-box { background:#111; display:flex; justify-content:center; align-items:center; min-height:300px; border:3px dashed #333; }
-    .upload-box span { font-size:48px; color:#95c11e; }
-    .fullscreen-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; justify-content:center; align-items:center; animation:fadeIn 0.4s forwards; }
-    .fullscreen-overlay img { max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 30px #95c11e; border:4px solid #95c11e; animation:zoomIn 0.4s ease; }
-    .fullscreen-overlay.active { display:flex; }
-    .admin-login { position:fixed; top:20px; right:20px; background:#111; padding:10px; border:2px solid #95c11e; border-radius:8px; z-index:1000; }
-    @keyframes popIn { from {transform:scale(0.8);opacity:0;} to {transform:scale(1);opacity:1;} }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    @keyframes zoomIn { from {transform:scale(0.6);opacity:0;} to {transform:scale(1);opacity:1;} }
+    body {
+      background-color: black;
+      padding: 100px 50px;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      animation: fadeIn 1s ease;
+    }
+
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .gallery-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      cursor: pointer;
+      animation: popIn 0.5s ease forwards;
+      border: 3px solid transparent;
+    }
+
+    .gallery-container img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px #95c11e;
+      border: 3px solid #95c11e;
+      z-index: 10;
+    }
+
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .fullscreen-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #95c11e;
+      border: 4px solid #95c11e;
+      animation: zoomIn 0.4s ease;
+    }
+
+    .fullscreen-overlay.active {
+      display: flex;
+    }
+
+    .upload-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #111;
+      border-radius: 10px;
+      height: 100%;
+      min-height: 300px;
+      cursor: pointer;
+      position: relative;
+      border: 3px dashed #333;
+      transition: 0.3s ease;
+    }
+
+    .upload-box:hover {
+      box-shadow: 0 0 15px #95c11e;
+      border: 3px solid #95c11e;
+    }
+
+    .upload-box span {
+      font-size: 48px;
+      color: #95c11e;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #95c11e;
+      border: none;
+      color: black;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      z-index: 20;
+    }
+
+    .save-btn {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #95c11e;
+      border: none;
+      padding: 5px 10px;
+      color: black;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 30;
+    }
+
+    .admin-login {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      border: 2px solid #95c11e;
+      border-radius: 8px;
+      padding: 10px;
+      z-index: 10000;
+    }
+
+    .admin-login input {
+      background: black;
+      border: 1px solid #95c11e;
+      color: white;
+      padding: 5px;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -28,64 +158,46 @@
   </div>
 
   <div class="gallery-container" id="gallery">
-    <img src="./Img-vid/1.jpeg" class="static-image">
-    <img src="./Img-vid/2.jpeg" class="static-image">
-    <img src="./Img-vid/3.jpeg" class="static-image">
-    <img src="./Img-vid/4.jpeg" class="static-image">
-    <img src="./Img-vid/5.jpeg" class="static-image">
-    <img src="./Img-vid/6.jpeg" class="static-image">
-    <img src="./Img-vid/7.jpeg" class="static-image">
-    <img src="./Img-vid/8.jpeg" class="static-image">
-    <img src="./Img-vid/9.jpeg" class="static-image">
-    <img src="./Img-vid/10.jpeg" class="static-image">
-    <img src="./Img-vid/11.jpeg" class="static-image">
-    <img src="./Img-vid/12.jpeg" class="static-image">
-    <img src="./Img-vid/13.jpeg" class="static-image">
-    <img src="./Img-vid/14.jpg" class="static-image">
-    <img src="./Img-vid/15.jpg" class="static-image">
+    <img src="./Img-vid/1.jpeg" alt="Gallery Image 1">
+    <img src="./Img-vid/2.jpeg" alt="Gallery Image 2">
+    <img src="./Img-vid/3.jpeg" alt="Gallery Image 3">
+    <img src="./Img-vid/4.jpeg" alt="Gallery Image 4">
+    <img src="./Img-vid/5.jpeg" alt="Gallery Image 5">
+    <img src="./Img-vid/6.jpeg" alt="Gallery Image 6">
+    <img src="./Img-vid/7.jpeg" alt="Gallery Image 7">
+    <img src="./Img-vid/8.jpeg" alt="Gallery Image 8">
+    <img src="./Img-vid/9.jpeg" alt="Gallery Image 9">
+    <img src="./Img-vid/10.jpeg" alt="Gallery Image 10">
+    <img src="./Img-vid/11.jpeg" alt="Gallery Image 11">
+    <img src="./Img-vid/12.jpeg" alt="Gallery Image 12">
+    <img src="./Img-vid/13.jpeg" alt="Gallery Image 13">
+    <img src="./Img-vid/14.jpg" alt="Gallery Image 14">
+    <img src="./Img-vid/15.jpg" alt="Gallery Image 15">
   </div>
 
-  <div class="fullscreen-overlay" id="overlay">
-    <img id="overlayImg">
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <img id="fullscreenImage" src="" alt="Full Screen View" />
   </div>
 
   <script>
-    let isAdmin = false;
-    let uploadedImages = [];
-
-    // Config
     const CLOUDINARY_UPLOAD_PRESET = "gallery_upload";
     const CLOUDINARY_CLOUD_NAME = "dhrjqsvmq";
     const JSONBIN_BIN_ID = "684eea128a456b7966ae9886";
     const JSONBIN_SECRET = "Y$2a$10$1ReRtjk39Ep/jXa5fN7pA.NAeDEkqiJfuvhRgeB2drqcn7xSW/Lyi";
-    const ADMIN_PASSWORD = "admin123";
 
-    const gallery = document.getElementById('gallery');
-    const overlay = document.getElementById('overlay');
-    const overlayImg = document.getElementById('overlayImg');
+    let isAdmin = false;
+    let uploadedImages = [];
 
-    // Fullscreen view
-    gallery.addEventListener('click', e => {
-      if (e.target.tagName === 'IMG') {
-        overlayImg.src = e.target.src;
-        overlay.classList.add('active');
-      }
-    });
-    overlay.addEventListener('click', () => overlay.classList.remove('active'));
-
-    // Admin login
     function checkPassword() {
-      const pass = document.getElementById('adminPass').value;
-      if (pass === ADMIN_PASSWORD) {
+      const pass = document.getElementById("adminPass").value;
+      if (pass === "admin123") {
         isAdmin = true;
         enableUploadBox();
-        allowDeleteOnUploaded();
       } else {
-        alert('Wrong password!');
+        alert("Wrong password!");
       }
     }
 
-    // Upload box for admin
     function enableUploadBox() {
       if (document.querySelector('.upload-box')) return;
       const box = document.createElement('div');
@@ -99,68 +211,104 @@
         f.onchange = async () => {
           const file = f.files[0];
           if (!file) return;
+
           const fd = new FormData();
           fd.append('file', file);
           fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
           const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-            method: 'POST', body: fd
-          }).then(r=>r.json());
-          if (!r.secure_url) { alert('Upload failed'); return; }
-          uploadedImages.push(r.secure_url);
-          saveToJSONBin();
-          addUploadedImage(r.secure_url, true);
+            method: 'POST',
+            body: fd
+          }).then(r => r.json());
+
+          if (!r.secure_url) {
+            alert('Upload failed');
+            return;
+          }
+
+          addUploadedImage(r.secure_url, true, true);
         };
         f.click();
       });
     }
 
-    // Add uploaded image to DOM
-    function addUploadedImage(url, animate=true) {
+    function addUploadedImage(url, animate = true, showSave = false) {
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+
       const img = document.createElement('img');
       img.src = url;
-      img.className = animate ? 'uploaded' : 'uploaded no-animate';
-      gallery.appendChild(img);
-    }
+      img.alt = "Uploaded Image";
+      img.className = "uploaded-image";
+      img.addEventListener('click', () => {
+        fullscreenImage.src = img.src;
+        overlay.classList.add('active');
+      });
 
-    // Delete support for admin
-    function allowDeleteOnUploaded() {
-      document.querySelectorAll('.uploaded').forEach(img => {
+      wrapper.appendChild(img);
+
+      if (isAdmin) {
         img.addEventListener('contextmenu', e => {
           e.preventDefault();
-          if (confirm('Delete image?')) {
-            img.remove();
-            uploadedImages = uploadedImages.filter(u => u !== img.src);
+          if (confirm('Delete this image?')) {
+            wrapper.remove();
+            uploadedImages = uploadedImages.filter(i => i !== url);
             saveToJSONBin();
           }
         });
-      });
+
+        if (showSave) {
+          const saveBtn = document.createElement('button');
+          saveBtn.textContent = "💾 Save";
+          saveBtn.className = "save-btn";
+          saveBtn.onclick = async () => {
+            uploadedImages.push(url);
+            await saveToJSONBin();
+            saveBtn.remove();
+          };
+          wrapper.appendChild(saveBtn);
+        }
+      }
+
+      gallery.insertBefore(wrapper, document.querySelector('.upload-box') || null);
     }
 
-    // Save to JSONBin
-    async function saveToJSONBin(){
+    async function saveToJSONBin() {
       await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type':'application/json',
-          'X-Master-Key':JSONBIN_SECRET,
-          'X-Bin-Versioning':'false'
+          "Content-Type": "application/json",
+          "X-Master-Key": JSONBIN_SECRET,
+          "X-Bin-Versioning": "false"
         },
-        body: JSON.stringify({images: uploadedImages})
+        body: JSON.stringify({ images: uploadedImages })
       });
     }
 
-    // Load uploaded images on page load (FOR EVERYONE)
-    async function loadUploadedImages(){
-      const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-        headers:{'X-Master-Key':JSONBIN_SECRET}
-      }).then(r=>r.json());
-      uploadedImages = r.record.images || [];
-      uploadedImages.forEach(url => addUploadedImage(url, false));
+    async function loadUploadedImages() {
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+          headers: { "X-Master-Key": JSONBIN_SECRET }
+        });
+        const data = await res.json();
+        const urls = data.record.images || [];
+        uploadedImages = urls;
+        urls.forEach(url => addUploadedImage(url, false));
+      } catch (err) {
+        console.error("Error loading uploaded images:", err);
+      }
     }
 
-    // Load on page load
-    window.onload = loadUploadedImages;
-  </script>
+    const gallery = document.getElementById('gallery');
+    const overlay = document.getElementById('fullscreenOverlay');
+    const fullscreenImage = document.getElementById('fullscreenImage');
 
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      fullscreenImage.src = "";
+    });
+
+    loadUploadedImages();
+  </script>
 </body>
 </html>
