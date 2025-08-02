@@ -1,86 +1,108 @@
-var crsr = document.querySelector("#cursor")
-var blurr = document.querySelector("#cursor-blur")
-document.addEventListener("mousemove",function(dets){
-    crsr.style.left = dets.x+30+"px"
-    crsr.style.top = dets.y+"px"
-    blurr.style.left = dets.x - 250 +"px"
-    blurr.style.top = dets.y- 250 +"px"
-})
+// --- Custom Cursor Logic ---
+var crsr = document.querySelector("#cursor");
+var blurr = document.querySelector("#cursor-blur");
 
-var h4all = document.querySelectorAll("#nav h4")
-h4all.forEach(function(elem){
-    elem.addEventListener("mouseenter",function(){
-        crsr.style.scale = 2
-        crsr.style.border = "1px solid #fff"
-        crsr.style.backgroundColor = "transparent"
-    })
-    elem.addEventListener("mouseleave",function(){
-        crsr.style.scale = 1
-        crsr.style.border = "0px solid #95c11e"
-        crsr.style.backgroundColor = "#95c11e"
-    })
-})
+document.addEventListener("mousemove", function(dets) {
+    // Only run if the cursor element exists (won't on mobile)
+    if (crsr) {
+        crsr.style.left = dets.x + 30 + "px";
+        crsr.style.top = dets.y + "px";
+    }
+    if (blurr) {
+        blurr.style.left = dets.x - 250 + "px";
+        blurr.style.top = dets.y - 250 + "px";
+    }
+});
 
-gsap.to("#nav",{
+var h4all = document.querySelectorAll("#nav h4");
+h4all.forEach(function(elem) {
+    elem.addEventListener("mouseenter", function() {
+        if (crsr) {
+            crsr.style.scale = 2;
+            crsr.style.border = "1px solid #fff";
+            crsr.style.backgroundColor = "transparent";
+        }
+    });
+    elem.addEventListener("mouseleave", function() {
+        if (crsr) {
+            crsr.style.scale = 1;
+            crsr.style.border = "0px solid #95c11e";
+            crsr.style.backgroundColor = "#95c11e";
+        }
+    });
+});
+
+// --- Hamburger Menu Logic ---
+const hamburger = document.querySelector(".hamburger");
+const navLinks = document.querySelector(".nav-links");
+
+hamburger.addEventListener('click', () => {
+    // Toggle Nav
+    navLinks.classList.toggle('active');
+    
+    // Hamburger Animation
+    hamburger.classList.toggle('toggle');
+});
+
+// --- GSAP Animations ---
+gsap.to("#nav", {
     backgroundColor: "#000",
-    height:"110px",
-    duration:1,
+    height: "110px",
+    duration: 0.5,
     scrollTrigger: {
         trigger: "#nav",
-        scroller:"body",
-        // markers:true,
+        scroller: "body",
         start: "top -10%",
         end: "top -11%",
-        scrub:2
+        scrub: 1
     }
-})
+});
 
-gsap.to("#main",{
-    backgroundColor:"#000",
-    scrollTrigger:{
-        trigger:"#main",
-        scroller:"body",
-        // markers:true 
-        start:"top -25%",
-        end:"top -70%",
-        scrub:2
+gsap.to("#main", {
+    backgroundColor: "#000",
+    scrollTrigger: {
+        trigger: "#main",
+        scroller: "body",
+        start: "top -25%",
+        end: "top -70%",
+        scrub: 2
     }
-})
-gsap.from("#about-us img, #about-us-in",{
-    y:90,
-    opacity:0,
-    duration:1.5,
-    scrollTrigger:{
-        trigger:"#about-us",
-        scroller:"body",
-        // markers:true,
-        start:"top 70%",
+});
+
+gsap.from("#about-us img, #about-us-in", {
+    y: 90,
+    opacity: 0,
+    duration: 1,
+    scrollTrigger: {
+        trigger: "#about-us",
+        scroller: "body",
+        start: "top 70%",
         end: "top 65%",
-        scrub:1
+        scrub: 1
     }
-})
-// gsap.from(".card",{
-//     scale:0.8,
-//     opacity:0,
-//     stagger:0.5,
-//     duration:1.5,
-//     scrollTrigger:{
-//         trigger:".card",
-//         scroller:"body",
-//         // markers:true,
-//         start:"top 70%",
-//         end: "top 65%",
-//         scrub:1
-//     }
-// })
-gsap.from("#page4 h1",{
-    y:50,
-    scrollTrigger:{
-        trigger:"#page4 h1",
-        scroller:"body",
-        // markers:true,
-        start:"top 75%",
+});
+
+gsap.from(".card", {
+    scale: 0.8,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.1,
+    scrollTrigger: {
+        trigger: ".card",
+        scroller: "body",
+        start: "top 70%",
+        end: "top 65%",
+        scrub: 1
+    }
+});
+
+gsap.from("#page4 h1", {
+    y: 50,
+    scrollTrigger: {
+        trigger: "#page4 h1",
+        scroller: "body",
+        start: "top 75%",
         end: "top 70%",
-        scrub:3
+        scrub: 3
     }
-})
+});
