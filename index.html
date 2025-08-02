@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Canvas of Dreams - Responsive</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,16 +11,23 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
 </head>
 <body>
-      <div id = "nav">
+      <div id="nav">
         <a href="./index.html"><img src="./Img-vid/Logo for Canvas of Dreams.png" alt="Canvas Of Dreams"></a>
-        <h4>Workshops</h4>
-        <h4><a href="./gallery.html">Gallery</a></h4>
-        <h4>Events</h4>
-        <h4>Contact / Join Us</h4>
+        <div class="nav-links">
+            <h4>Workshops</h4>
+            <h4><a href="./gallery.html">Gallery</a></h4>
+            <h4>Events</h4>
+            <h4>Contact / Join Us</h4>
+        </div>
+        <div class="hamburger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
       </div>
       <div id="cursor"></div>
       <div id="cursor-blur"></div>
-      <video autoplay loop muted src="./Img-vid/background video.mp4"></video>
+      <video autoplay loop muted playsinline src="./Img-vid/background video.mp4"></video>
       <div id="main">
         <div id="page1">
           <h1>CREATE. DISCOVER. OWN.</h1>
@@ -35,49 +42,37 @@
         <div id="page2">
           <div id="scroller">
             <div id="scroller-in">
-              <img src="./Img-vid/image1.1.png">
-              <img src="./Img-vid/card1.png">
-              <img src="./Img-vid/card2.png">
-              <img src="./Img-vid/card3.png">
-              <img src="./Img-vid/float1.png">
-              <img src="./Img-vid/float2.png">
-              <img src="./Img-vid/float3.png">
-              <img src="./Img-vid/float4.png">
-              <img src="./Img-vid/float5.png">
+              <img src="./Img-vid/image1.1.png" alt="Art">
+              <img src="./Img-vid/card1.png" alt="Art">
+              <img src="./Img-vid/card2.png" alt="Art">
+              <img src="./Img-vid/card3.png" alt="Art">
+              <img src="./Img-vid/float1.png" alt="Art">
+              <img src="./Img-vid/float2.png" alt="Art">
+              <img src="./Img-vid/float3.png" alt="Art">
+              <img src="./Img-vid/float4.png" alt="Art">
+              <img src="./Img-vid/float5.png" alt="Art">
             </div>
             <div id="scroller-in">
-              <img src="./Img-vid/image1.1.png">
-              <img src="./Img-vid/card1.png">
-              <img src="./Img-vid/card2.png">
-              <img src="./Img-vid/card3.png">
-              <img src="./Img-vid/float1.png">
-              <img src="./Img-vid/float2.png">
-              <img src="./Img-vid/float3.png">
-              <img src="./Img-vid/float4.png">
-              <img src="./Img-vid/float5.png">
-            </div>
-            <div id="scroller-in">
-              <img src="./Img-vid/image1.1.png">
-              <img src="./Img-vid/card1.png">
-              <img src="./Img-vid/card2.png">
-              <img src="./Img-vid/card3.png">
-              <img src="./Img-vid/float1.png">
-              <img src="./Img-vid/float2.png">
-              <img src="./Img-vid/float3.png">
-              <img src="./Img-vid/float4.png">
-              <img src="./Img-vid/float5.png">
+                <img src="./Img-vid/image1.1.png" alt="Art">
+                <img src="./Img-vid/card1.png" alt="Art">
+                <img src="./Img-vid/card2.png" alt="Art">
+                <img src="./Img-vid/card3.png" alt="Art">
+                <img src="./Img-vid/float1.png" alt="Art">
+                <img src="./Img-vid/float2.png" alt="Art">
+                <img src="./Img-vid/float3.png" alt="Art">
+                <img src="./Img-vid/float4.png" alt="Art">
+                <img src="./Img-vid/float5.png" alt="Art">
             </div>
           </div>
           <div id="about-us">
-            <img src="./Img-vid/image1.1.png">
+            <img src="./Img-vid/image1.1.png" alt="About Us Art">
             <div id="about-us-in">
               <h3>ABOUT US</h3>
               <p>At Canvas of Dreams, we believe art is more than just decoration — it's emotion, memory, and expression. 
-                Every painting we share is made with heart, capturing stories, colors, and moments that speak to the soul. 
-                Whether you're here to explore, get inspired, or find the perfect piece for your space, you're part of a creative journey that celebrates imagination and beauty.<br></p>
+                Every painting we share is made with heart, capturing stories, colors, and moments that speak to the soul.</p>
               <p><a href="https://instagram.com/qvocadoe" target="_blank" rel="noopener noreferrer">Follow us on Instagram</a></p>
             </div>
-            <img src="./Img-vid/image1.2.png">
+            <img src="./Img-vid/image1.2.png" alt="About Us Art 2">
           </div>
           <div id="cards-container">
             <div class="card" id="card1">
@@ -100,43 +95,29 @@
             </div>
           </div>
           <div id="green-div">
-            <img src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/dots-side.svg">
-            <h3>Every Painting Has a Story to Tell. Step into a world of colors, emotions, and everyday moments captured on canvas.
-                Discover the beauty hidden in ordinary scenes, and feel the heart behind each brushstroke.</h3>
-            <img src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/dots-side.svg">
+            <img src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/dots-side.svg" alt="decoration">
+            <h3>Every Painting Has a Story to Tell. Step into a world of colors, emotions, and everyday moments captured on canvas.</h3>
+            <img src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/dots-side.svg" alt="decoration">
           </div>
         </div>
-        <!-- <div id="page3">
-           <p>Beautifully crafted space — vibrant galleries filled with unique paintings, rich textures, and colors that speak to the soul. Every artwork tells a story, waiting for you to find it.</p>
-           <img id="colon1" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-left.svg">
-           <img id="colon2" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-right.svg">
-        </div> -->
         <div id="page3">
-          <div class="paragraph-wrapper">
-            <img class="colon1" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-left.svg" alt="colon" />
-            <p>Beautifully crafted space — vibrant galleries filled with unique paintings, rich textures, and colors that speak to the soul. Every artwork tells a story, waiting for you to find it.</p>
-            <img class="colon2" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-right.svg" alt="colon" />
-          </div>
+           <p>Beautifully crafted space — vibrant galleries filled with unique paintings, rich textures, and colors that speak to the soul. Every artwork tells a story, waiting for you to find it.</p>
+           <img id="colon1" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-left.svg" alt="quote">
+           <img id="colon2" src="https://eiwgew27fhz.exactdn.com/wp-content/themes/puttosaurus/img/quote-right.svg" alt="quote">
         </div>
-
         <div id="page4">
           <h1>Check these out!</h1>
           <div class="elem">
             <h2><a href="./gallery.html">GALLERY</a></h2>
-            <img src="./Img-vid/image2.jpg">
+            <img src="./Img-vid/image2.jpg" alt="Gallery Preview">
           </div>
         </div>
-        <!-- <div id="footer">
-          <img src="./Img-vid/Logo for Canvas of Dreams.png">
-        </div> -->
-        <!-- HTML -->
         <footer>
           <div class="footer-container">
             <div class="footer-logo">
-              <a href="./Img-vid/Logo for Canvas of Dreams.png"></a>
+              <a href="./index.html"><img src="./Img-vid/Logo for Canvas of Dreams.png" alt="Canvas of Dreams Logo"></a>
               <p>Bringing stories to life through art.</p>
             </div>
-
             <div class="footer-links">
               <h3>Explore</h3>
               <ul>
@@ -146,26 +127,19 @@
                 <li><a href="#">Contact</a></li>
               </ul>
             </div>
-
             <div class="footer-contact">
               <h3>Contact</h3>
               <p>Email: hello@canvasofdreams.com</p>
               <p>Instagram: @qvocadoe</p>
             </div>
           </div>
-
           <div class="footer-bottom">
             <p>&copy; 2025 Canvas of Dreams. All rights reserved.</p>
           </div>
         </footer>
-
       </div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" 
-      integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" 
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" 
-      integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" 
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
       <script src="script.js"></script>
 </body>
 </html>
