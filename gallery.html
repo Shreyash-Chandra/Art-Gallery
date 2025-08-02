@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gallery</title>
+  <title>Online Art Gallery</title>
   <style>
     body {
       background-color: black;
@@ -12,142 +12,86 @@
       font-family: 'Segoe UI', sans-serif;
       animation: fadeIn 1s ease;
     }
-
     .gallery-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      z-index: 10;
       position: relative;
     }
-
+    .image-wrapper {
+        position: relative;
+        animation: popIn 0.5s ease forwards;
+    }
     .gallery-container img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       border-radius: 10px;
       transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
       cursor: pointer;
-      animation: popIn 0.5s ease forwards;
       border: 3px solid transparent;
     }
-
     .gallery-container img:hover {
       transform: scale(1.08);
       box-shadow: 0 0 15px #95c11e;
       border: 3px solid #95c11e;
       z-index: 10;
     }
-
     .fullscreen-overlay {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.95);
-      display: none;
-      justify-content: center;
-      align-items: center;
+      display: none; justify-content: center; align-items: center;
       z-index: 9999;
       animation: fadeIn 0.4s ease forwards;
     }
-
     .fullscreen-overlay img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 12px;
-      box-shadow: 0 0 30px #95c11e;
+      max-width: 90%; max-height: 90%;
+      border-radius: 12px; box-shadow: 0 0 30px #95c11e;
       border: 4px solid #95c11e;
       animation: zoomIn 0.4s ease;
     }
-
-    .fullscreen-overlay.active {
-      display: flex;
-    }
-
+    .fullscreen-overlay.active { display: flex; }
     .upload-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #111;
-      border-radius: 10px;
-      height: 100%;
-      min-height: 300px;
-      cursor: pointer;
-      position: relative;
+      display: flex; justify-content: center; align-items: center;
+      background-color: #111; border-radius: 10px;
+      aspect-ratio: 1/1; /* Makes the box square */
+      cursor: pointer; position: relative;
       border: 3px dashed #333;
       transition: 0.3s ease;
+      animation: popIn 0.5s ease forwards;
     }
-
     .upload-box:hover {
       box-shadow: 0 0 15px #95c11e;
       border: 3px solid #95c11e;
     }
-
-    .upload-box span {
-      font-size: 48px;
-      color: #95c11e;
-    }
-
+    .upload-box span { font-size: 48px; color: #95c11e; }
     .delete-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background-color: #95c11e;
-      border: none;
-      color: black;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      z-index: 20;
+      position: absolute; top: 8px; right: 8px;
+      background-color: #ff4757; border: none;
+      color: white; font-size: 14px; font-weight: bold;
+      cursor: pointer; border-radius: 50%;
+      width: 25px; height: 25px; z-index: 20;
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s ease;
     }
-
-    .save-btn {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #95c11e;
-      border: none;
-      padding: 5px 10px;
-      color: black;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 30;
-    }
-
+    .image-wrapper:hover .delete-btn { opacity: 1; }
     .admin-login {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #111;
-      border: 2px solid #95c11e;
-      border-radius: 8px;
-      padding: 10px;
-      z-index: 10000;
+      position: fixed; top: 20px; right: 20px;
+      background: #111; border: 2px solid #95c11e;
+      border-radius: 8px; padding: 10px; z-index: 10000;
     }
-
     .admin-login input {
-      background: black;
-      border: 1px solid #95c11e;
-      color: white;
-      padding: 5px;
+      background: black; border: 1px solid #95c11e; color: white;
+      padding: 5px; border-radius: 4px;
     }
-
-    @keyframes popIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .admin-login button {
+        background: #95c11e; border: none; color: black;
+        padding: 5px 10px; border-radius: 4px; cursor: pointer;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes zoomIn {
-      from { transform: scale(0.6); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes zoomIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -157,158 +101,179 @@
     <button onclick="checkPassword()">Login</button>
   </div>
 
-  <div class="gallery-container" id="gallery">
-    <img src="./Img-vid/1.jpeg" alt="Gallery Image 1">
-    <img src="./Img-vid/2.jpeg" alt="Gallery Image 2">
-    <img src="./Img-vid/3.jpeg" alt="Gallery Image 3">
-    <img src="./Img-vid/4.jpeg" alt="Gallery Image 4">
-    <img src="./Img-vid/5.jpeg" alt="Gallery Image 5">
-    <img src="./Img-vid/6.jpeg" alt="Gallery Image 6">
-    <img src="./Img-vid/7.jpeg" alt="Gallery Image 7">
-    <img src="./Img-vid/8.jpeg" alt="Gallery Image 8">
-    <img src="./Img-vid/9.jpeg" alt="Gallery Image 9">
-    <img src="./Img-vid/10.jpeg" alt="Gallery Image 10">
-    <img src="./Img-vid/11.jpeg" alt="Gallery Image 11">
-    <img src="./Img-vid/12.jpeg" alt="Gallery Image 12">
-    <img src="./Img-vid/13.jpeg" alt="Gallery Image 13">
-    <img src="./Img-vid/14.jpg" alt="Gallery Image 14">
-    <img src="./Img-vid/15.jpg" alt="Gallery Image 15">
-  </div>
+  <div class="gallery-container" id="gallery"></div>
 
   <div class="fullscreen-overlay" id="fullscreenOverlay">
     <img id="fullscreenImage" src="" alt="Full Screen View" />
   </div>
 
   <script>
-    const CLOUDINARY_UPLOAD_PRESET = "gallery_upload";
+    // --- PART 1: CONFIGURATION ---
+    // PASTE YOUR CREDENTIALS FROM CLOUDINARY AND JSONBIN HERE
     const CLOUDINARY_CLOUD_NAME = "dhrjqsvmq";
-    const JSONBIN_BIN_ID = "684eea128a456b7966ae9886";
-    const JSONBIN_SECRET = "Y$2a$10$1ReRtjk39Ep/jXa5fN7pA.NAeDEkqiJfuvhRgeB2drqcn7xSW/Lyi";
+    const CLOUDINARY_UPLOAD_PRESET = "art-galleryy";
+    const JSONBIN_BIN_ID = "688de6db7b4b8670d8ab8d01";
+    const JSONBIN_MASTER_KEY = "$2a$10$x0D0FLMMULUFTIwP/5fr6e872/fpmhPMbWDACvhkiZxVVwcc710ae";
+    const ADMIN_PASSWORD = "admin123"; // You can change the admin password here
 
+    // --- PART 2: SCRIPT STATE AND DOM ELEMENTS ---
     let isAdmin = false;
-    let uploadedImages = [];
+    let imageCache = [];
+    const gallery = document.getElementById('gallery');
+    const overlay = document.getElementById('fullscreenOverlay');
+    const fullscreenImage = document.getElementById('fullscreenImage');
 
+    // --- PART 3: CORE FUNCTIONS ---
+
+    // Renders the entire gallery based on the current state
+    function renderGallery() {
+        gallery.innerHTML = '';
+        imageCache.forEach(url => addImageToDOM(url));
+        if (isAdmin) {
+            enableUploadBox();
+        }
+    }
+
+    // Creates a single image element and adds it to the page
+    function addImageToDOM(url) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'image-wrapper';
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = "Gallery Image";
+      img.onclick = () => showFullscreen(url);
+      wrapper.appendChild(img);
+
+      if (isAdmin) {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = "X";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.title = "Delete Image";
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation(); // Prevent fullscreen on click
+            deleteImage(url);
+        };
+        wrapper.appendChild(deleteBtn);
+      }
+      gallery.appendChild(wrapper);
+    }
+    
+    // Creates the '+' box for uploading files
+    function enableUploadBox() {
+        if (document.querySelector('.upload-box')) return;
+        const box = document.createElement('div');
+        box.className = 'upload-box';
+        box.innerHTML = '<span>+</span>';
+        gallery.appendChild(box);
+
+        box.onclick = () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = () => handleFileUpload(fileInput.files[0], box);
+            fileInput.click();
+        };
+    }
+
+    // --- PART 4: ADMIN AND API FUNCTIONS ---
+
+    // Checks password and enables admin mode
     function checkPassword() {
       const pass = document.getElementById("adminPass").value;
-      if (pass === "admin123") {
+      if (pass === ADMIN_PASSWORD) {
         isAdmin = true;
-        enableUploadBox();
+        alert("Admin access granted!");
+        document.querySelector('.admin-login').style.display = 'none';
+        renderGallery();
       } else {
         alert("Wrong password!");
       }
     }
 
-    function enableUploadBox() {
-      if (document.querySelector('.upload-box')) return;
-      const box = document.createElement('div');
-      box.className = 'upload-box';
-      box.innerHTML = '<span>+</span>';
-      gallery.appendChild(box);
-
-      box.addEventListener('click', () => {
-        const f = document.createElement('input');
-        f.type = 'file'; f.accept = 'image/*';
-        f.onchange = async () => {
-          const file = f.files[0];
-          if (!file) return;
-
-          const fd = new FormData();
-          fd.append('file', file);
-          fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-          const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-            method: 'POST',
-            body: fd
-          }).then(r => r.json());
-
-          if (!r.secure_url) {
-            alert('Upload failed');
-            return;
-          }
-
-          addUploadedImage(r.secure_url, true, true);
-        };
-        f.click();
-      });
-    }
-
-    function addUploadedImage(url, animate = true, showSave = false) {
-      const wrapper = document.createElement('div');
-      wrapper.style.position = 'relative';
-
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = "Uploaded Image";
-      img.className = "uploaded-image";
-      img.addEventListener('click', () => {
-        fullscreenImage.src = img.src;
-        overlay.classList.add('active');
-      });
-
-      wrapper.appendChild(img);
-
-      if (isAdmin) {
-        img.addEventListener('contextmenu', e => {
-          e.preventDefault();
-          if (confirm('Delete this image?')) {
-            wrapper.remove();
-            uploadedImages = uploadedImages.filter(i => i !== url);
-            saveToJSONBin();
-          }
-        });
-
-        if (showSave) {
-          const saveBtn = document.createElement('button');
-          saveBtn.textContent = "💾 Save";
-          saveBtn.className = "save-btn";
-          saveBtn.onclick = async () => {
-            uploadedImages.push(url);
+    // Handles the file upload process to Cloudinary
+    async function handleFileUpload(file, uploadBox) {
+        if (!file) return;
+        uploadBox.innerHTML = '<span>...</span>'; // Show uploading feedback
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        try {
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (!data.secure_url) throw new Error('Upload failed.');
+            
+            imageCache.push(data.secure_url);
             await saveToJSONBin();
-            saveBtn.remove();
-          };
-          wrapper.appendChild(saveBtn);
+            renderGallery();
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Upload failed. Check the console for details.");
+            uploadBox.innerHTML = '<span>+</span>'; // Reset on failure
         }
-      }
-
-      gallery.insertBefore(wrapper, document.querySelector('.upload-box') || null);
     }
 
+    // Deletes an image URL from the cache and saves the change
+    async function deleteImage(urlToDelete) {
+        if (!confirm('Are you sure you want to delete this image?')) return;
+        imageCache = imageCache.filter(url => url !== urlToDelete);
+        await saveToJSONBin();
+        renderGallery();
+    }
+    
+    // Saves the current imageCache array to your JSONBin
     async function saveToJSONBin() {
-      await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": JSONBIN_SECRET,
-          "X-Bin-Versioning": "false"
-        },
-        body: JSON.stringify({ images: uploadedImages })
-      });
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_MASTER_KEY,
+          },
+          body: JSON.stringify({ images: imageCache })
+        });
+      } catch (error) {
+          console.error("Failed to save to JSONBin:", error);
+          alert("Could not save gallery state.");
+      }
     }
 
-    async function loadUploadedImages() {
+    // Loads the list of image URLs from your JSONBin on page load
+    async function loadImagesFromJSONBin() {
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-          headers: { "X-Master-Key": JSONBIN_SECRET }
+          headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
         });
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        const urls = data.record.images || [];
-        uploadedImages = urls;
-        urls.forEach(url => addUploadedImage(url, false));
+        imageCache = data.record.images || [];
       } catch (err) {
-        console.error("Error loading uploaded images:", err);
+        console.error("Could not load images from JSONBin:", err);
+        imageCache = []; // Start with an empty gallery on error
       }
     }
 
-    const gallery = document.getElementById('gallery');
-    const overlay = document.getElementById('fullscreenOverlay');
-    const fullscreenImage = document.getElementById('fullscreenImage');
+    // --- PART 5: EVENT LISTENERS AND INITIALIZATION ---
+    function showFullscreen(url) {
+        fullscreenImage.src = url;
+        overlay.classList.add('active');
+    }
 
-    overlay.addEventListener('click', () => {
+    overlay.onclick = () => {
       overlay.classList.remove('active');
       fullscreenImage.src = "";
-    });
+    };
 
-    loadUploadedImages();
+    // This is the main function that starts the app
+    async function initializeApp() {
+        await loadImagesFromJSONBin();
+        renderGallery();
+    }
+    
+    initializeApp();
   </script>
 </body>
 </html>
