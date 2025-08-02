@@ -82,20 +82,6 @@ gsap.from("#about-us img, #about-us-in", {
     }
 });
 
-gsap.from(".card", {
-    scale: 0.8,
-    opacity: 0,
-    duration: 1,
-    stagger: 0.1,
-    scrollTrigger: {
-        trigger: ".card",
-        scroller: "body",
-        start: "top 70%",
-        end: "top 65%",
-        scrub: 1
-    }
-});
-
 gsap.from("#page4 h1", {
     y: 50,
     scrollTrigger: {
@@ -105,4 +91,26 @@ gsap.from("#page4 h1", {
         end: "top 70%",
         scrub: 3
     }
+});
+
+// --- Intersection Observer for card animations (Reliable Fix) ---
+const cards = document.querySelectorAll('.card');
+
+const cardObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        // If the card is in the viewport
+        if (entry.isIntersecting) {
+            // Add the 'is-visible' class to trigger the CSS transition
+            entry.target.classList.add('is-visible');
+            // Stop observing the card once it's visible to save resources
+            observer.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.1 // Trigger when 10% of the card is visible
+});
+
+// Tell the observer to watch each card
+cards.forEach(card => {
+    cardObserver.observe(card);
 });
